@@ -4,12 +4,18 @@ import PropTypes from 'prop-types'
 class CommentInput extends React.Component {
   // 对 props 添加校验，onSubmit 为方法
   static propTypes = {
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    username: PropTypes.any,
+    onUserNameInputBlur: PropTypes.func
   }
-  constructor() {
-    super()
+  // 设置默认值
+  static defaultProps = {
+    username: ''
+  }
+  constructor(props) {
+    super(props)
     this.state = {
-      username: '',
+      username: props.username,
       content: ''
     }
     this.handleUsername = this.handleUsername.bind(this)
@@ -19,7 +25,7 @@ class CommentInput extends React.Component {
   }
   // 不依赖 DOM 的操作放在此生命周期内
   componentWillMount () {
-    this._loadUsername()
+    // this._loadUsername()
   }
   render() {
     return (
@@ -55,18 +61,20 @@ class CommentInput extends React.Component {
   }
   // 保存用户名的私有方法，私有方法以_开头
   _saveUsername (username) {
-    localStorage.setItem('username', username)
+    // localStorage.setItem('username', username)
   }
   // 加载保存的用户名
   _loadUsername () {
-    const username = localStorage.getItem('username')
-    if(username) {
-      this.setState({username})
-    }
+    // const username = localStorage.getItem('username')
+    // if(username) {
+    //   this.setState({username})
+    // }
   }
   // 姓名输入框失焦事件，在这里保存用户名到 localstorage
   handleUsernameBlur (event) {
-    this._saveUsername (event.target.value)
+    if(this.props.onUserNameInputBlur) {
+      this.props.onUserNameInputBlur(event.target.value)
+    }
   }
   // 处理用户输入评论内容
   handleContent (event) {
